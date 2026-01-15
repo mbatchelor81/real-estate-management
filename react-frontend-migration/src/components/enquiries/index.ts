@@ -1,0 +1,1 @@
+export { EnquiriesRelatedList } from './EnquiriesRelatedList';

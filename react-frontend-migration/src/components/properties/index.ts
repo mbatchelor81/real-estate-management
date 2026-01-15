@@ -6,3 +6,4 @@ export { PropertiesListItem } from './PropertiesListItem';
 export { PropertyCoordinatesModal } from './PropertyCoordinatesModal';
 export type { PropertyCoordinatesModalProps } from './PropertyCoordinatesModal';
 export { PropertyNewModal } from './PropertyNewModal';
+export { PropertyUploadsModal } from './PropertyUploadsModal';

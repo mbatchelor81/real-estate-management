@@ -1,0 +1,200 @@
+{
+  "auditDate": "2026-01-15",
+  "repository": "mbatchelor81/real-estate-management",
+  "focusModules": ["properties", "map", "mortgage-calc"],
+  "routingStrategy": {
+    "preloadingStrategy": "PreloadAllModules",
+    "routeReuseStrategy": "IonicRouteStrategy"
+  },
+  "routes": {
+    "root": {
+      "path": "",
+      "redirectTo": "map",
+      "pathMatch": "full"
+    },
+    "map": {
+      "path": "map",
+      "loadChildren": "./map/map.module#MapPageModule",
+      "lazyLoaded": true,
+      "guards": [],
+      "childRoutes": [
+        {
+          "path": "",
+          "component": "MapPage",
+          "guards": []
+        }
+      ],
+      "reactEquivalent": {
+        "router": "React Router v6",
+        "pattern": "lazy(() => import('./pages/Map'))",
+        "notes": "Use React.lazy with Suspense for code splitting"
+      }
+    },
+    "properties": {
+      "path": "properties",
+      "loadChildren": "./properties/properties.module#PropertiesPageModule",
+      "lazyLoaded": true,
+      "guards": [],
+      "childRoutes": [
+        {
+          "path": "",
+          "component": "PropertiesPage",
+          "guards": []
+        },
+        {
+          "path": ":id",
+          "component": "PropertiesDetailComponent",
+          "guards": [],
+          "params": ["id"]
+        }
+      ],
+      "reactEquivalent": {
+        "router": "React Router v6",
+        "pattern": "lazy(() => import('./pages/Properties'))",
+        "childPattern": "<Route path=':id' element={<PropertyDetail />} />",
+        "notes": "Use useParams() hook for :id parameter"
+      }
+    },
+    "mortgage-calc": {
+      "path": "mortgage-calc",
+      "loadChildren": "./mortgage-calc/mortgage-calc.module#MortgageCalcPageModule",
+      "lazyLoaded": true,
+      "guards": [],
+      "childRoutes": [
+        {
+          "path": "",
+          "component": "MortgageCalcPage",
+          "guards": []
+        }
+      ],
+      "reactEquivalent": {
+        "router": "React Router v6",
+        "pattern": "lazy(() => import('./pages/MortgageCalc'))",
+        "notes": "Simple page component, no child routes needed"
+      }
+    },
+    "enquiries": {
+      "path": "enquiries",
+      "loadChildren": "./enquiries/enquiries.module#EnquiriesPageModule",
+      "lazyLoaded": true,
+      "guards": [],
+      "notes": "Referenced by properties module for enquiry forms"
+    },
+    "user": {
+      "path": "user",
+      "loadChildren": "./user/user.module#UserPageModule",
+      "lazyLoaded": true,
+      "guards": ["AuthGuard", "AuthGuestGuard"],
+      "notes": "Contains signin, register, profile routes"
+    },
+    "settings": {
+      "path": "settings",
+      "loadChildren": "./settings/settings.module#SettingsPageModule",
+      "lazyLoaded": true,
+      "guards": []
+    },
+    "about": {
+      "path": "about",
+      "loadChildren": "./about/about.module#AboutPageModule",
+      "lazyLoaded": true,
+      "guards": []
+    }
+  },
+  "guards": {
+    "AuthGuard": {
+      "file": "frontend/src/app/user/auth.guard.ts",
+      "type": "CanActivate",
+      "logic": "Checks if user is authenticated, redirects to signin if not",
+      "reactEquivalent": {
+        "pattern": "ProtectedRoute component wrapper",
+        "implementation": "Check auth state in context, redirect with Navigate component"
+      }
+    },
+    "AuthGuestGuard": {
+      "file": "frontend/src/app/user/auth-guest.guard.ts",
+      "type": "CanActivate",
+      "logic": "Checks if user is NOT authenticated (for guest-only pages)",
+      "reactEquivalent": {
+        "pattern": "GuestRoute component wrapper",
+        "implementation": "Check auth state, redirect authenticated users away"
+      }
+    }
+  },
+  "queryParams": {
+    "map": {
+      "lat": {
+        "type": "number",
+        "description": "Latitude for map center/marker highlight"
+      },
+      "lng": {
+        "type": "number",
+        "description": "Longitude for map center/marker highlight"
+      }
+    },
+    "properties": {
+      "filter": {
+        "type": "string",
+        "description": "Comma-separated property types to filter"
+      },
+      "sort": {
+        "type": "string",
+        "description": "Sort order: latest, name, price"
+      },
+      "search": {
+        "type": "string",
+        "description": "Search text for property name/address"
+      }
+    }
+  },
+  "navigationPatterns": {
+    "programmaticNavigation": [
+      {
+        "from": "PropertiesDetailComponent",
+        "to": "/map",
+        "method": "router.navigate(['/map'], { queryParams: { lat, lng } })",
+        "purpose": "Find property location on map"
+      },
+      {
+        "from": "PropertiesPage",
+        "to": "/user/signin",
+        "method": "router.navigateByUrl('/user/signin')",
+        "purpose": "Redirect unauthenticated users"
+      },
+      {
+        "from": "MapPopupComponent",
+        "to": "/properties/:id",
+        "method": "router.navigate(['/properties', property.property_id])",
+        "purpose": "View property details from map popup"
+      }
+    ],
+    "deepLinking": {
+      "map": {
+        "pattern": "/map?lat=X&lng=Y",
+        "behavior": "Centers map and highlights marker at coordinates"
+      },
+      "properties": {
+        "pattern": "/properties?filter=X&sort=Y&search=Z",
+        "behavior": "Applies filters and search to property list"
+      }
+    }
+  },
+  "migrationNotes": {
+    "routerDifferences": [
+      "Angular uses loadChildren for lazy loading, React uses React.lazy()",
+      "Angular guards become wrapper components or route loaders in React Router",
+      "Angular queryParams become useSearchParams() hook in React Router",
+      "Angular ActivatedRoute.snapshot becomes useParams() and useSearchParams()"
+    ],
+    "recommendedReactRouterSetup": {
+      "version": "6.x",
+      "features": [
+        "createBrowserRouter for data loading",
+        "lazy() for code splitting",
+        "useParams() for route params",
+        "useSearchParams() for query params",
+        "Navigate component for redirects",
+        "Outlet for nested routes"
+      ]
+    }
+  }
+}

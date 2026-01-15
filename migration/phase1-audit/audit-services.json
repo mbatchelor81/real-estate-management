@@ -1,0 +1,531 @@
+{
+  "auditDate": "2026-01-15",
+  "repository": "mbatchelor81/real-estate-management",
+  "focusModules": ["properties", "map", "mortgage-calc"],
+  "services": {
+    "PropertiesService": {
+      "file": "frontend/src/app/properties/properties.service.ts",
+      "providedIn": "root",
+      "dependencies": ["HttpClient", "UserService"],
+      "stateManagement": {
+        "pattern": "BehaviorSubject + Signals",
+        "observables": [
+          {
+            "name": "properties$",
+            "type": "Observable<Property[] | undefined>",
+            "source": "BehaviorSubject",
+            "description": "Main property list state"
+          },
+          {
+            "name": "propertiesOwned$",
+            "type": "Observable<Property[] | undefined>",
+            "source": "BehaviorSubject",
+            "description": "User's owned properties"
+          }
+        ],
+        "signals": [
+          {
+            "name": "isLoading",
+            "type": "WritableSignal<boolean>",
+            "initialValue": false,
+            "description": "Loading state indicator"
+          },
+          {
+            "name": "hasMore",
+            "type": "WritableSignal<boolean>",
+            "initialValue": true,
+            "description": "Pagination indicator"
+          }
+        ],
+        "reactEquivalent": {
+          "pattern": "Zustand store or React Context + useReducer",
+          "notes": "BehaviorSubject pattern maps well to Zustand with selectors"
+        }
+      },
+      "methods": [
+        {
+          "name": "fetchProperties",
+          "httpVerb": "GET",
+          "endpoint": "/properties",
+          "parameters": [
+            {"name": "sort", "type": "string", "default": "latest"},
+            {"name": "filter", "type": "string", "optional": true},
+            {"name": "search", "type": "string", "optional": true}
+          ],
+          "queryParams": ["limit", "sort", "search", "filter", "lastCreatedAt", "lastPrice", "lastName"],
+          "returnType": "Promise<ApiResponse<{items: Property[], lastCreatedAt?: string, lastPrice?: string, lastName?: string, hasMore?: boolean}>>",
+          "description": "Fetch properties with cursor-based pagination",
+          "reactEquivalent": {
+            "hook": "useQuery from @tanstack/react-query",
+            "pattern": "Custom hook with infinite query for pagination"
+          }
+        },
+        {
+          "name": "fetchProperty",
+          "httpVerb": "GET",
+          "endpoint": "/properties/:id",
+          "parameters": [
+            {"name": "id", "type": "string", "required": true}
+          ],
+          "returnType": "Promise<ApiResponse<Property>>",
+          "description": "Fetch single property by ID",
+          "reactEquivalent": {
+            "hook": "useQuery",
+            "pattern": "useQuery(['property', id], () => fetchProperty(id))"
+          }
+        },
+        {
+          "name": "addProperty",
+          "httpVerb": "POST",
+          "endpoint": "/properties",
+          "parameters": [
+            {"name": "property", "type": "Property", "required": true}
+          ],
+          "authentication": "Bearer token required",
+          "returnType": "Promise<ApiResponse<Property>>",
+          "description": "Create new property listing",
+          "reactEquivalent": {
+            "hook": "useMutation",
+            "pattern": "useMutation with optimistic updates"
+          }
+        },
+        {
+          "name": "addPropertyImage",
+          "httpVerb": "POST",
+          "endpoint": "/properties/upload/images/:id",
+          "parameters": [
+            {"name": "files", "type": "File[]", "required": true},
+            {"name": "id", "type": "string", "required": true}
+          ],
+          "authentication": "Bearer token required",
+          "contentType": "multipart/form-data",
+          "returnType": "Promise<ApiResponse<string[]>>",
+          "description": "Upload property images",
+          "reactEquivalent": {
+            "hook": "useMutation",
+            "pattern": "FormData upload with progress tracking"
+          }
+        },
+        {
+          "name": "deletePropertyImage",
+          "httpVerb": "DELETE",
+          "endpoint": "/properties/upload/images/:id",
+          "parameters": [
+            {"name": "images", "type": "string[]", "required": true},
+            {"name": "propId", "type": "string", "required": true}
+          ],
+          "authentication": "Bearer token required",
+          "returnType": "Promise<ApiResponse<string[]>>",
+          "description": "Delete property images"
+        },
+        {
+          "name": "removeProperty",
+          "httpVerb": "DELETE",
+          "endpoint": "/properties/:id",
+          "parameters": [
+            {"name": "propId", "type": "string", "required": true}
+          ],
+          "authentication": "Bearer token required",
+          "returnType": "Promise<ApiResponse<Property>>",
+          "description": "Delete property listing"
+        },
+        {
+          "name": "updateProperty",
+          "httpVerb": "PATCH",
+          "endpoint": "/properties/:id",
+          "parameters": [
+            {"name": "updated", "type": "Property", "required": true}
+          ],
+          "authentication": "Bearer token required",
+          "returnType": "Promise<ApiResponse<Property>>",
+          "description": "Update property details"
+        },
+        {
+          "name": "fetchOwnedProperties",
+          "httpVerb": "GET",
+          "endpoint": "/properties/me",
+          "parameters": [],
+          "authentication": "Bearer token required",
+          "returnType": "Promise<ApiResponse<Property[]>>",
+          "description": "Fetch current user's properties"
+        }
+      ],
+      "stateHelpers": [
+        {
+          "name": "addPropertyToState",
+          "description": "Add property to both properties and propertiesOwned arrays"
+        },
+        {
+          "name": "removePropertyFromState",
+          "description": "Remove property from state arrays by ID"
+        },
+        {
+          "name": "resetState",
+          "description": "Clear all properties and pagination cursors"
+        },
+        {
+          "name": "setPropertiesState",
+          "description": "Append properties and update pagination cursors"
+        }
+      ]
+    },
+    "MapService": {
+      "file": "frontend/src/app/map/map.service.ts",
+      "providedIn": "root",
+      "dependencies": [],
+      "stateManagement": {
+        "pattern": "Stateless service",
+        "notes": "Pure utility service for Leaflet operations"
+      },
+      "methods": [
+        {
+          "name": "addTiles",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "map", "type": "L.Map", "required": true},
+            {"name": "isDark", "type": "boolean", "default": false}
+          ],
+          "returnType": "void",
+          "description": "Add tile layer to Leaflet map with theme support",
+          "thirdPartyIntegration": {
+            "library": "Leaflet",
+            "method": "L.tileLayer"
+          },
+          "reactEquivalent": {
+            "library": "react-leaflet",
+            "component": "TileLayer",
+            "pattern": "<TileLayer url={isDark ? darkTiles : lightTiles} />"
+          }
+        },
+        {
+          "name": "addMarker",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "map", "type": "L.Map", "required": true},
+            {"name": "coord", "type": "Coord", "required": true},
+            {"name": "options", "type": "{icon?: L.Icon, popup?: HTMLElement}", "default": "{icon: null, popup: null}"}
+          ],
+          "returnType": "L.Marker",
+          "description": "Create marker with optional icon and popup",
+          "thirdPartyIntegration": {
+            "library": "Leaflet",
+            "method": "L.marker"
+          },
+          "reactEquivalent": {
+            "library": "react-leaflet",
+            "component": "Marker with Popup",
+            "pattern": "<Marker position={[lat, lng]} icon={customIcon}><Popup>{content}</Popup></Marker>"
+          }
+        }
+      ]
+    },
+    "StorageService": {
+      "file": "frontend/src/app/shared/services/storage/storage.service.ts",
+      "providedIn": "root",
+      "dependencies": ["Storage (@ionic/storage-angular)"],
+      "stateManagement": {
+        "pattern": "Ionic Storage wrapper",
+        "notes": "Persists data to IndexedDB/localStorage via Ionic Storage"
+      },
+      "methods": [
+        {
+          "name": "init",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [],
+          "returnType": "Promise<void>",
+          "description": "Initialize Ionic Storage instance"
+        },
+        {
+          "name": "set",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "key", "type": "string", "required": true},
+            {"name": "value", "type": "any", "required": true}
+          ],
+          "returnType": "Promise<void>",
+          "description": "Store value by key"
+        },
+        {
+          "name": "get",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "key", "type": "string", "required": true}
+          ],
+          "returnType": "Promise<any>",
+          "description": "Retrieve value by key"
+        },
+        {
+          "name": "setDarkTheme",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "value", "type": "boolean", "required": true}
+          ],
+          "returnType": "Promise<void>",
+          "description": "Persist dark theme preference"
+        },
+        {
+          "name": "getDartTheme",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [],
+          "returnType": "Promise<boolean>",
+          "description": "Retrieve dark theme preference"
+        },
+        {
+          "name": "setCoord",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "coord", "type": "Coord", "required": true}
+          ],
+          "returnType": "Promise<void>",
+          "description": "Persist map coordinates"
+        },
+        {
+          "name": "getCoord",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [],
+          "returnType": "Promise<Coord>",
+          "description": "Retrieve map coordinates"
+        },
+        {
+          "name": "setUser",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "user", "type": "UserSignedIn", "required": true}
+          ],
+          "returnType": "Promise<void>",
+          "description": "Persist user session"
+        },
+        {
+          "name": "getUser",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [],
+          "returnType": "Promise<UserSignedIn>",
+          "description": "Retrieve user session"
+        },
+        {
+          "name": "removeUser",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [],
+          "returnType": "Promise<void>",
+          "description": "Clear user session"
+        }
+      ],
+      "reactEquivalent": {
+        "options": [
+          {
+            "library": "@capacitor/preferences",
+            "notes": "For Capacitor mobile apps, use Preferences plugin"
+          },
+          {
+            "library": "localforage",
+            "notes": "For web-only, localforage provides similar IndexedDB abstraction"
+          },
+          {
+            "library": "zustand with persist middleware",
+            "notes": "Can combine state management with persistence"
+          }
+        ]
+      }
+    },
+    "RestrictionService": {
+      "file": "frontend/src/app/shared/services/restriction/restriction.service.ts",
+      "providedIn": "root",
+      "dependencies": ["ToastController", "AlertController"],
+      "stateManagement": {
+        "pattern": "Environment-based feature flag",
+        "notes": "Reads restricted mode from environment config"
+      },
+      "methods": [
+        {
+          "name": "restricted (getter)",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [],
+          "returnType": "boolean",
+          "description": "Check if restricted mode is enabled"
+        },
+        {
+          "name": "showToast",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "duration", "type": "number", "optional": true},
+            {"name": "message", "type": "string", "optional": true},
+            {"name": "heading", "type": "string", "optional": true}
+          ],
+          "returnType": "void",
+          "description": "Display restriction toast notification"
+        },
+        {
+          "name": "showAlert",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "message", "type": "string", "optional": true},
+            {"name": "heading", "type": "string", "optional": true}
+          ],
+          "returnType": "void",
+          "description": "Display restriction alert dialog"
+        }
+      ],
+      "reactEquivalent": {
+        "pattern": "Custom hook + toast library",
+        "implementation": "useRestriction hook with react-hot-toast or similar"
+      }
+    },
+    "UserService": {
+      "file": "frontend/src/app/user/user.service.ts",
+      "providedIn": "root",
+      "dependencies": ["HttpClient", "StorageService", "Router"],
+      "stateManagement": {
+        "pattern": "BehaviorSubject",
+        "observables": [
+          {
+            "name": "user$",
+            "type": "Observable<UserSignedIn>",
+            "source": "BehaviorSubject",
+            "description": "Current authenticated user state"
+          }
+        ],
+        "reactEquivalent": {
+          "pattern": "React Context + useReducer or Zustand",
+          "notes": "Auth state should be global, accessible throughout app"
+        }
+      },
+      "methods": [
+        {
+          "name": "signIn",
+          "httpVerb": "POST",
+          "endpoint": "/auth/signin",
+          "parameters": [
+            {"name": "email", "type": "string", "required": true},
+            {"name": "password", "type": "string", "required": true}
+          ],
+          "returnType": "Promise<ApiResponse<UserSignedIn>>",
+          "description": "Authenticate user with email/password"
+        },
+        {
+          "name": "register",
+          "httpVerb": "POST",
+          "endpoint": "/auth/register",
+          "parameters": [
+            {"name": "fullName", "type": "string", "required": true},
+            {"name": "email", "type": "string", "required": true},
+            {"name": "password", "type": "string", "required": true}
+          ],
+          "returnType": "Promise<ApiResponse<UserSignedIn>>",
+          "description": "Register new user account"
+        },
+        {
+          "name": "googleAuth",
+          "httpVerb": "POST",
+          "endpoint": "/auth/google",
+          "parameters": [
+            {"name": "payload", "type": "GoogleAuthResponse", "required": true}
+          ],
+          "returnType": "Promise<ApiResponse<UserSignedIn>>",
+          "description": "Authenticate via Google OAuth"
+        },
+        {
+          "name": "signOut",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [],
+          "returnType": "Promise<void>",
+          "description": "Clear user session and redirect to signin"
+        },
+        {
+          "name": "changePassword",
+          "httpVerb": "POST",
+          "endpoint": "/auth/change-password",
+          "parameters": [
+            {"name": "passwordNew", "type": "string", "required": true},
+            {"name": "passwordCurrent", "type": "string", "required": true}
+          ],
+          "authentication": "Bearer token required",
+          "returnType": "Promise<ApiResponse>",
+          "description": "Change user password"
+        },
+        {
+          "name": "updateUser",
+          "httpVerb": "PATCH",
+          "endpoint": "/users/me",
+          "parameters": [
+            {"name": "user", "type": "Partial<User>", "required": true}
+          ],
+          "authentication": "Bearer token required",
+          "returnType": "Promise<ApiResponse<User>>",
+          "description": "Update user profile"
+        },
+        {
+          "name": "getCurrentUser",
+          "httpVerb": "GET",
+          "endpoint": "/users/me",
+          "parameters": [],
+          "authentication": "Bearer token required",
+          "returnType": "Promise<ApiResponse<UserDetails>>",
+          "description": "Fetch current user details with activities and notifications"
+        },
+        {
+          "name": "isPropertyOwner",
+          "httpVerb": null,
+          "endpoint": null,
+          "parameters": [
+            {"name": "property", "type": "Property", "required": true}
+          ],
+          "returnType": "boolean",
+          "description": "Check if current user owns the property"
+        }
+      ]
+    }
+  },
+  "apiEndpointsSummary": {
+    "baseUrl": "environment.api.server (http://localhost:8000/)",
+    "authentication": "JWT Bearer token in Authorization header",
+    "endpoints": [
+      {"method": "GET", "path": "/properties", "auth": false, "description": "List properties"},
+      {"method": "GET", "path": "/properties/:id", "auth": false, "description": "Get property"},
+      {"method": "POST", "path": "/properties", "auth": true, "description": "Create property"},
+      {"method": "PATCH", "path": "/properties/:id", "auth": true, "description": "Update property"},
+      {"method": "DELETE", "path": "/properties/:id", "auth": true, "description": "Delete property"},
+      {"method": "POST", "path": "/properties/upload/images/:id", "auth": true, "description": "Upload images"},
+      {"method": "DELETE", "path": "/properties/upload/images/:id", "auth": true, "description": "Delete images"},
+      {"method": "GET", "path": "/properties/me", "auth": true, "description": "Get user's properties"},
+      {"method": "POST", "path": "/auth/signin", "auth": false, "description": "User login"},
+      {"method": "POST", "path": "/auth/register", "auth": false, "description": "User registration"},
+      {"method": "POST", "path": "/auth/google", "auth": false, "description": "Google OAuth"},
+      {"method": "POST", "path": "/auth/change-password", "auth": true, "description": "Change password"},
+      {"method": "GET", "path": "/users/me", "auth": true, "description": "Get current user"},
+      {"method": "PATCH", "path": "/users/me", "auth": true, "description": "Update user"}
+    ]
+  },
+  "migrationRecommendations": {
+    "httpClient": {
+      "current": "Angular HttpClient",
+      "recommended": "axios or fetch with custom wrapper",
+      "notes": "Create api.ts utility with interceptors for auth headers"
+    },
+    "stateManagement": {
+      "current": "BehaviorSubject + Signals",
+      "recommended": "Zustand or @tanstack/react-query",
+      "notes": "Zustand for client state, React Query for server state"
+    },
+    "dependencyInjection": {
+      "current": "Angular DI with inject() and constructor injection",
+      "recommended": "React Context for services, custom hooks for logic",
+      "notes": "Create usePropertiesService, useMapService hooks"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import { useAppDispatch, useAppSelector, restoreSession, restoreTheme } from '@/store';
 import type { UserSignedIn } from '@/types';
 
@@ -49,6 +50,7 @@ export default function App(): React.ReactElement {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Toaster position="top-center" />
       <header className="bg-white shadow-sm">
         <nav className="container mx-auto flex items-center justify-between px-4 py-3">
           <Link to="/" className="text-xl font-bold text-blue-600">

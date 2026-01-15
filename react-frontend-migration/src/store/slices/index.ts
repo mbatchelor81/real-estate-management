@@ -1,6 +1,7 @@
 export { default as authReducer } from './authSlice';
 export { default as propertiesReducer } from './propertiesSlice';
 export { default as uiReducer } from './uiSlice';
+export { default as notificationsReducer } from './notificationsSlice';
 
 export {
   setUser,
@@ -41,3 +42,18 @@ export {
   setGlobalLoading,
   restoreTheme,
 } from './uiSlice';
+
+export {
+  resetNotifications,
+  insertNotificationToState,
+  removeNotificationsFromState,
+  setNotificationsAsReadInState,
+  clearNotificationsError,
+  fetchNotifications,
+  markAsRead,
+  selectNotifications,
+  selectNotificationsLoading,
+  selectNotificationsError,
+  selectNotificationsInitialFetchDone,
+  selectUnreadNotificationsCount,
+} from './notificationsSlice';

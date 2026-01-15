@@ -1,3 +1,5 @@
+import type { UserNotificationType } from './notification';
+
 export interface User {
   user_id: string;
   fullName: string;
@@ -24,7 +26,7 @@ export interface Activity {
 
 export interface Notification {
   id: string;
-  type: string;
+  type: UserNotificationType;
   message: string;
   read: boolean;
   createdAt: string;

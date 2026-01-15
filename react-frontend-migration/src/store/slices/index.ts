@@ -7,10 +7,15 @@ export {
   signOut,
   clearError as clearAuthError,
   restoreSession,
+  initializeAuth,
   signIn,
   register,
   googleAuth,
   changePassword,
+  selectAuthUser,
+  selectAuthIsAuthenticated,
+  selectAuthIsLoading,
+  selectAuthError,
 } from './authSlice';
 
 export {

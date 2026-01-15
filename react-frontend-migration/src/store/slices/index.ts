@@ -3,6 +3,7 @@ export { default as propertiesReducer } from './propertiesSlice';
 export { default as uiReducer } from './uiSlice';
 export { default as enquiriesReducer } from './enquiriesSlice';
 export { default as activitiesReducer } from './activitiesSlice';
+export { default as notificationsReducer } from './notificationsSlice';
 
 export {
   setUser,
@@ -72,3 +73,18 @@ export {
   selectActivitiesLoading,
   selectActivitiesError,
 } from './activitiesSlice';
+
+export {
+  resetNotifications,
+  insertNotificationToState,
+  removeNotificationsFromState,
+  setNotificationsAsReadInState,
+  clearNotificationsError,
+  fetchNotifications,
+  markAsRead,
+  selectNotifications,
+  selectNotificationsLoading,
+  selectNotificationsError,
+  selectNotificationsInitialFetchDone,
+  selectUnreadNotificationsCount,
+} from './notificationsSlice';

@@ -29,3 +29,12 @@ export {
   getLastName,
   getPaginationCursors,
 } from './propertiesService';
+
+export {
+  createNotificationsService,
+  getNotifications,
+  getNotificationsLoading,
+  getNotificationsError,
+  getNotificationsInitialFetchDone,
+  getUnreadNotificationsCount,
+} from './notificationsService';

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authReducer, propertiesReducer, uiReducer, enquiriesReducer, activitiesReducer } from './slices';
+import { authReducer, propertiesReducer, uiReducer, enquiriesReducer, activitiesReducer, notificationsReducer } from './slices';
 
 export const store = configureStore({
   reducer: {
@@ -8,6 +8,7 @@ export const store = configureStore({
     ui: uiReducer,
     enquiries: enquiriesReducer,
     activities: activitiesReducer,
+    notifications: notificationsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

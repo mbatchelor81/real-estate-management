@@ -64,7 +64,7 @@ export function ActivityTimeline({ activities: propActivities }: ActivityTimelin
               <button
                 type="button"
                 onClick={() => viewProperty(activity)}
-                className="mt-2 inline-flex h-11 items-center rounded-md bg-primary px-6 py-2 text-base text-white hover:bg-primary/90"
+                className="mt-2 inline-flex h-11 items-center rounded-md bg-blue-600 px-6 py-2 text-base text-white hover:bg-blue-700"
               >
                 View Property
               </button>
@@ -74,7 +74,7 @@ export function ActivityTimeline({ activities: propActivities }: ActivityTimelin
               <button
                 type="button"
                 onClick={() => viewEnquiry(activity)}
-                className="mt-2 inline-flex h-11 items-center rounded-md bg-primary px-6 py-2 text-base text-white hover:bg-primary/90"
+                className="mt-2 inline-flex h-11 items-center rounded-md bg-blue-600 px-6 py-2 text-base text-white hover:bg-blue-700"
               >
                 View Enquiry
               </button>

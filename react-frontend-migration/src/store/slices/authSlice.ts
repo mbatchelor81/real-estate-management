@@ -140,4 +140,11 @@ const authSlice = createSlice({
 });
 
 export const { setUser, signOut, clearError, restoreSession } = authSlice.actions;
+
+export const selectAuthUser = (state: { auth: AuthState }): UserSignedIn | null => state.auth.user;
+export const selectAuthIsAuthenticated = (state: { auth: AuthState }): boolean =>
+  state.auth.isAuthenticated;
+export const selectAuthIsLoading = (state: { auth: AuthState }): boolean => state.auth.isLoading;
+export const selectAuthError = (state: { auth: AuthState }): string | null => state.auth.error;
+
 export default authSlice.reducer;

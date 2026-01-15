@@ -1,6 +1,9 @@
 export { default as authReducer } from './authSlice';
 export { default as propertiesReducer } from './propertiesSlice';
 export { default as uiReducer } from './uiSlice';
+export { default as enquiriesReducer } from './enquiriesSlice';
+export { default as activitiesReducer } from './activitiesSlice';
+export { default as notificationsReducer } from './notificationsSlice';
 
 export {
   setUser,
@@ -41,3 +44,47 @@ export {
   setGlobalLoading,
   restoreTheme,
 } from './uiSlice';
+
+export {
+  resetEnquiries,
+  setCurrentEnquiry,
+  insertEnquiryToState,
+  updateEnquiryInState,
+  removeEnquiryFromState,
+  clearError as clearEnquiriesError,
+  fetchEnquiries,
+  fetchEnquiry,
+  createEnquiry,
+  removeEnquiry,
+  readEnquiry,
+  selectEnquiries,
+  selectCurrentEnquiry,
+  selectEnquiriesIsLoading,
+  selectEnquiriesError,
+  selectEnquiriesInitialFetchDone,
+} from './enquiriesSlice';
+
+export {
+  insertActivity,
+  resetActivities,
+  clearError as clearActivitiesError,
+  fetchActivities,
+  selectActivities,
+  selectActivitiesLoading,
+  selectActivitiesError,
+} from './activitiesSlice';
+
+export {
+  resetNotifications,
+  insertNotificationToState,
+  removeNotificationsFromState,
+  setNotificationsAsReadInState,
+  clearNotificationsError,
+  fetchNotifications,
+  markAsRead,
+  selectNotifications,
+  selectNotificationsLoading,
+  selectNotificationsError,
+  selectNotificationsInitialFetchDone,
+  selectUnreadNotificationsCount,
+} from './notificationsSlice';

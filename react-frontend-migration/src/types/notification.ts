@@ -6,3 +6,11 @@ export const UserNotificationTypeValues = {
   Property: 'PROPERTY',
   System: 'SYSTEM',
 } as const;
+
+export interface MarkAsReadPayload {
+  id: string | string[];
+}
+
+export interface DeleteNotificationPayload {
+  id: string | string[];
+}

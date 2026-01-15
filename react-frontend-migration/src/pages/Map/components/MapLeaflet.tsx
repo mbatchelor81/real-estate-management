@@ -62,7 +62,7 @@ function getMarkerIcon(type: PropertyType | ''): L.Icon {
 export function MapLeaflet({
   properties,
   visibleMarkerTypes,
-  showPropertyMarkers = true,
+  showPropertyMarkers: _showPropertyMarkers = true,
   clickAddMarker = false,
   onClickedAt,
 }: MapLeafletProps): React.ReactElement {
@@ -179,53 +179,51 @@ export function MapLeaflet({
     if (landGroup) landGroup.addTo(map);
   }, [properties, addPropertyMarker]);
 
-  const initMap = useCallback(async (): Promise<void> => {
+  useEffect(() => {
     if (!mapContainerRef.current || isInitializedRef.current) return;
 
-    let center = DEFAULT_CENTER;
-    const savedCoord = await storageService.getCoord();
-    if (savedCoord) {
-      center = savedCoord;
-    }
+    const initMap = async (): Promise<void> => {
+      if (!mapContainerRef.current) return;
 
-    mapRef.current = L.map(mapContainerRef.current, {
-      center: [center.lat, center.lng],
-      zoom: DEFAULT_ZOOM,
-      minZoom: MIN_ZOOM,
-      zoomControl: false,
-    });
+      let center = DEFAULT_CENTER;
+      const savedCoord = await storageService.getCoord();
+      if (savedCoord) {
+        center = savedCoord;
+      }
 
-    L.control.zoom({ position: 'bottomleft' }).addTo(mapRef.current);
-
-    mapRef.current.whenReady(() => {
-      setTimeout(() => {
-        mapRef.current?.invalidateSize();
-      }, 1000);
-    });
-
-    const isDark = (await storageService.getDarkTheme()) ?? false;
-    mapService.addTiles(mapRef.current, isDark);
-
-    if (clickAddMarker) {
-      mapRef.current.on('click', (e: L.LeafletMouseEvent) => {
-        pendingMarkersRef.current.forEach((marker) => {
-          mapRef.current?.removeLayer(marker);
-        });
-        pendingMarkersRef.current = [];
-
-        pinMarker(e.latlng);
-        onClickedAt?.(e.latlng);
+      mapRef.current = L.map(mapContainerRef.current, {
+        center: [center.lat, center.lng],
+        zoom: DEFAULT_ZOOM,
+        minZoom: MIN_ZOOM,
+        zoomControl: false,
       });
-    }
 
-    if (showPropertyMarkers) {
-      setMapMarkers();
-    }
+      L.control.zoom({ position: 'bottomleft' }).addTo(mapRef.current);
 
-    isInitializedRef.current = true;
-  }, [clickAddMarker, onClickedAt, pinMarker, setMapMarkers, showPropertyMarkers]);
+      mapRef.current.whenReady(() => {
+        setTimeout(() => {
+          mapRef.current?.invalidateSize();
+        }, 1000);
+      });
 
-  useEffect(() => {
+      const isDark = (await storageService.getDarkTheme()) ?? false;
+      mapService.addTiles(mapRef.current, isDark);
+
+      if (clickAddMarker) {
+        mapRef.current.on('click', (e: L.LeafletMouseEvent) => {
+          pendingMarkersRef.current.forEach((marker) => {
+            mapRef.current?.removeLayer(marker);
+          });
+          pendingMarkersRef.current = [];
+
+          pinMarker(e.latlng);
+          onClickedAt?.(e.latlng);
+        });
+      }
+
+      isInitializedRef.current = true;
+    };
+
     void initMap();
 
     return (): void => {
@@ -235,7 +233,8 @@ export function MapLeaflet({
         isInitializedRef.current = false;
       }
     };
-  }, [initMap]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!mapRef.current || !isInitializedRef.current) return;

@@ -1,0 +1,1 @@
+export { PropertyBadge } from './PropertyBadge';

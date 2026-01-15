@@ -5,3 +5,4 @@ export { NeedSignIn } from './NeedSignIn';
 export { AlertCard } from './AlertCard';
 export { Footer } from './Footer';
 export { ModalSearch } from './ModalSearch';
+export { ContactForm } from './ContactForm';

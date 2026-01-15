@@ -4,3 +4,4 @@ export { HorizontalSlide } from './HorizontalSlide';
 export { NeedSignIn } from './NeedSignIn';
 export { AlertCard } from './AlertCard';
 export { Footer } from './Footer';
+export { ModalSearch } from './ModalSearch';

@@ -1,6 +1,7 @@
 export { default as authReducer } from './authSlice';
 export { default as propertiesReducer } from './propertiesSlice';
 export { default as uiReducer } from './uiSlice';
+export { default as enquiriesReducer } from './enquiriesSlice';
 
 export {
   setUser,
@@ -41,3 +42,22 @@ export {
   setGlobalLoading,
   restoreTheme,
 } from './uiSlice';
+
+export {
+  resetEnquiries,
+  setCurrentEnquiry,
+  insertEnquiryToState,
+  updateEnquiryInState,
+  removeEnquiryFromState,
+  clearError as clearEnquiriesError,
+  fetchEnquiries,
+  fetchEnquiry,
+  createEnquiry,
+  removeEnquiry,
+  readEnquiry,
+  selectEnquiries,
+  selectCurrentEnquiry,
+  selectEnquiriesIsLoading,
+  selectEnquiriesError,
+  selectEnquiriesInitialFetchDone,
+} from './enquiriesSlice';

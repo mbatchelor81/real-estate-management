@@ -1,0 +1,1 @@
+export { UserProperties } from './UserProperties';

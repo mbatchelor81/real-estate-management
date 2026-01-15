@@ -28,3 +28,13 @@ body {
   --color-bg: #1f2937;
   --color-text: #f9fafb;
 }
+
+/* Utility class to hide scrollbar while maintaining scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}

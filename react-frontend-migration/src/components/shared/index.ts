@@ -1,0 +1,1 @@
+export { HorizontalSlide } from './HorizontalSlide';

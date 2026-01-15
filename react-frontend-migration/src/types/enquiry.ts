@@ -23,6 +23,7 @@ export interface Enquiry {
   enquiry_id: string;
   title: string;
   content: string;
+  email: string;
   topic: EnquiryTopic;
   users: {
     from: EnquiryUser;

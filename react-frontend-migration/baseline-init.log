@@ -1,0 +1,155 @@
+=== React Frontend Migration - Baseline Initialization Log ===
+Generated: Thu Jan 15 01:51:25 UTC 2026
+
+=== Project Structure ===
+src/App.tsx
+src/api/auth.ts
+src/api/client.ts
+src/api/index.ts
+src/api/properties.ts
+src/components/ui/Button.tsx
+src/components/ui/Card.tsx
+src/components/ui/Input.tsx
+src/components/ui/LoadingSpinner.tsx
+src/components/ui/Modal.tsx
+src/components/ui/index.ts
+src/main.tsx
+src/pages/About/AboutPage.tsx
+src/pages/Enquiries/EnquiriesPage.tsx
+src/pages/Map/MapPage.tsx
+src/pages/MortgageCalc/MortgageCalcPage.tsx
+src/pages/Properties/PropertiesPage.tsx
+src/pages/Properties/PropertyDetailPage.tsx
+src/pages/Settings/SettingsPage.tsx
+src/pages/User/UserProfilePage.tsx
+src/pages/User/UserRegisterPage.tsx
+src/pages/User/UserSignInPage.tsx
+src/routes/GuestRoute.tsx
+src/routes/ProtectedRoute.tsx
+src/routes/index.ts
+src/routes/router.config.tsx
+src/store/hooks.ts
+src/store/index.ts
+src/store/slices/authSlice.ts
+src/store/slices/index.ts
+src/store/slices/propertiesSlice.ts
+src/store/slices/uiSlice.ts
+src/store/store.ts
+src/test/setup.ts
+src/types/api.ts
+src/types/enquiry.ts
+src/types/index.ts
+src/types/property.ts
+src/types/user.ts
+src/vite-env.d.ts
+
+=== Installed Dependencies ===
+react-frontend-migration@1.0.0 /home/ubuntu/repos/real-estate-management/react-frontend-migration
+├── @reduxjs/toolkit@2.11.2
+├── @tailwindcss/vite@4.1.18
+├── @testing-library/jest-dom@6.9.1
+├── @testing-library/react@16.3.1
+├── @types/react-dom@19.2.3
+├── @types/react@19.2.8
+├── @typescript-eslint/eslint-plugin@8.53.0
+├── @typescript-eslint/parser@8.53.0
+├── @vitejs/plugin-react@5.1.2
+├── axios@1.13.2
+├── eslint-plugin-react-hooks@7.0.1
+├── eslint-plugin-react@7.37.5
+├── eslint@9.39.2
+├── jsdom@27.4.0
+├── prettier@3.8.0
+├── react-dom@19.2.3
+├── react-redux@9.2.0
+├── react-router-dom@7.12.0
+├── react@19.2.3
+├── tailwindcss@4.1.18
+├── typescript@5.9.3
+├── vite@7.3.1
+└── vitest@4.0.17
+
+
+=== TypeScript Configuration ===
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/components/*": ["src/components/*"],
+      "@/pages/*": ["src/pages/*"],
+      "@/store/*": ["src/store/*"],
+      "@/api/*": ["src/api/*"],
+      "@/types/*": ["src/types/*"],
+      "@/hooks/*": ["src/hooks/*"],
+      "@/utils/*": ["src/utils/*"]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+
+=== Vite Configuration ===
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import { resolve } from 'path';
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src'),
+      '@/components': resolve(__dirname, './src/components'),
+      '@/pages': resolve(__dirname, './src/pages'),
+      '@/store': resolve(__dirname, './src/store'),
+      '@/api': resolve(__dirname, './src/api'),
+      '@/types': resolve(__dirname, './src/types'),
+      '@/hooks': resolve(__dirname, './src/hooks'),
+      '@/utils': resolve(__dirname, './src/utils'),
+    },
+  },
+  server: {
+    port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: true,
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    css: true,
+  },
+});

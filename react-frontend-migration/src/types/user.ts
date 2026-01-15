@@ -1,5 +1,17 @@
 import type { UserNotificationType } from './notification';
 
+export enum ActivityType {
+  EnquiryNew = 'ENQUIRY_NEW',
+  EnquiryDelete = 'ENQUIRY_DELETE',
+  PropertyNew = 'PROPERTY_NEW',
+  PropertyDelete = 'PROPERTY_DELETE',
+  PropertyUpdate = 'PROPERTY_UPDATE',
+  UserLogin = 'USER_LOGIN',
+  UserLogout = 'USER_LOGOUT',
+  UserRegister = 'USER_REGISTER',
+  UserUpdate = 'USER_UPDATE',
+}
+
 export interface User {
   user_id: string;
   fullName: string;

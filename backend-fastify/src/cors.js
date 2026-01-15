@@ -7,6 +7,7 @@ export const setFastifyCors = function (fastify) {
       "http://localhost:9000",
       "http://localhost:8100",
       "http://localhost:4200",
+      "http://localhost:3000",
     ],
   });
 };

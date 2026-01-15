@@ -64,7 +64,7 @@ export function PropertyEditModal({
   const { restricted, showAlert } = useRestriction();
 
   const propertiesService = useMemo(
-    () => createPropertiesService(dispatch, store.getState),
+    () => createPropertiesService(dispatch, () => store.getState()),
     [dispatch]
   );
 

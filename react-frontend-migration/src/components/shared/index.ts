@@ -1,5 +1,7 @@
 export { EnquiryBadge } from './EnquiryBadge';
 export { PropertyBadge } from './PropertyBadge';
+export { PropertyCard } from './PropertyCard';
+export { PropertiesList } from './PropertiesList';
 export { HorizontalSlide } from './HorizontalSlide';
 export { NeedSignIn } from './NeedSignIn';
 export { AlertCard } from './AlertCard';

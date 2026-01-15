@@ -1,0 +1,61 @@
+export interface CityData {
+  city: string;
+  lat: string;
+  lng: string;
+  [key: string]: string;
+}
+
+const phpCities: CityData[] = [
+  { city: 'Manila', lat: '14.6000', lng: '120.9833' },
+  { city: 'Quezon City', lat: '14.6333', lng: '121.0333' },
+  { city: 'Davao', lat: '7.0667', lng: '125.6000' },
+  { city: 'Caloocan City', lat: '14.6500', lng: '120.9667' },
+  { city: 'Cebu City', lat: '10.3000', lng: '123.9000' },
+  { city: 'Zamboanga City', lat: '6.9167', lng: '122.0833' },
+  { city: 'Taguig City', lat: '14.5167', lng: '121.0500' },
+  { city: 'Antipolo', lat: '14.5842', lng: '121.1763' },
+  { city: 'Pasig City', lat: '14.5750', lng: '121.0833' },
+  { city: 'Cagayan de Oro', lat: '8.4833', lng: '124.6500' },
+  { city: 'City of Parañaque', lat: '14.4667', lng: '121.0167' },
+  { city: 'Dasmariñas', lat: '14.3294', lng: '120.9367' },
+  { city: 'Valenzuela', lat: '14.7000', lng: '120.9833' },
+  { city: 'Bacoor', lat: '14.4624', lng: '120.9645' },
+  { city: 'General Santos', lat: '6.1167', lng: '125.1667' },
+  { city: 'Las Piñas City', lat: '14.4500', lng: '120.9833' },
+  { city: 'Makati City', lat: '14.5500', lng: '121.0333' },
+  { city: 'San Jose del Monte', lat: '14.8139', lng: '121.0453' },
+  { city: 'Bacolod', lat: '10.6765', lng: '122.9509' },
+  { city: 'Muntinlupa City', lat: '14.3833', lng: '121.0500' },
+  { city: 'City of Calamba', lat: '14.2167', lng: '121.1667' },
+  { city: 'Marikina City', lat: '14.6500', lng: '121.1000' },
+  { city: 'Iloilo', lat: '10.7167', lng: '122.5667' },
+  { city: 'Pasay City', lat: '14.5500', lng: '121.0000' },
+  { city: 'Angeles City', lat: '15.1472', lng: '120.5847' },
+  { city: 'Lapu-Lapu City', lat: '10.3127', lng: '123.9488' },
+  { city: 'Imus', lat: '14.4297', lng: '120.9367' },
+  { city: 'Mandaluyong City', lat: '14.5833', lng: '121.0333' },
+  { city: 'Rodriguez', lat: '14.7167', lng: '121.1167' },
+  { city: 'Malabon', lat: '14.6625', lng: '120.9567' },
+  { city: 'Mandaue City', lat: '10.3333', lng: '123.9333' },
+  { city: 'Santa Rosa', lat: '14.3167', lng: '121.1167' },
+  { city: 'Baguio City', lat: '16.4152', lng: '120.5956' },
+  { city: 'Iligan', lat: '8.2333', lng: '124.2500' },
+  { city: 'Tarlac City', lat: '15.4802', lng: '120.5979' },
+  { city: 'Butuan', lat: '8.9534', lng: '125.5288' },
+  { city: 'Biñan', lat: '14.3333', lng: '121.0833' },
+  { city: 'Lipa City', lat: '13.9411', lng: '121.1622' },
+  { city: 'Batangas', lat: '13.7500', lng: '121.0500' },
+  { city: 'San Pedro', lat: '14.3583', lng: '121.0583' },
+  { city: 'Cainta', lat: '14.5667', lng: '121.1167' },
+  { city: 'Taytay', lat: '14.5692', lng: '121.1325' },
+  { city: 'General Trias', lat: '14.3833', lng: '120.8833' },
+  { city: 'Cabuyao', lat: '14.2750', lng: '121.1250' },
+  { city: 'San Fernando', lat: '15.0333', lng: '120.6833' },
+  { city: 'Cabanatuan City', lat: '15.4833', lng: '120.9667' },
+  { city: 'Cotabato', lat: '7.2167', lng: '124.2500' },
+  { city: 'Binangonan', lat: '14.4514', lng: '121.1919' },
+  { city: 'Lucena', lat: '13.9333', lng: '121.6167' },
+  { city: 'San Pablo', lat: '14.0700', lng: '121.3250' },
+];
+
+export default phpCities;

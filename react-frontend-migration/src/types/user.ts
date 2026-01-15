@@ -19,9 +19,12 @@ export interface UserDetails extends User {
 }
 
 export interface Activity {
-  type: string;
+  action: string;
   description: string;
-  date: string;
+  property_id?: string;
+  enquiry_id?: string;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 export interface Notification {

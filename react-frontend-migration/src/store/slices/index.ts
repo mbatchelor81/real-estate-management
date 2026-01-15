@@ -1,6 +1,7 @@
 export { default as authReducer } from './authSlice';
 export { default as propertiesReducer } from './propertiesSlice';
 export { default as uiReducer } from './uiSlice';
+export { default as activitiesReducer } from './activitiesSlice';
 
 export {
   setUser,
@@ -41,3 +42,13 @@ export {
   setGlobalLoading,
   restoreTheme,
 } from './uiSlice';
+
+export {
+  insertActivity,
+  resetActivities,
+  clearError as clearActivitiesError,
+  fetchActivities,
+  selectActivities,
+  selectActivitiesLoading,
+  selectActivitiesError,
+} from './activitiesSlice';

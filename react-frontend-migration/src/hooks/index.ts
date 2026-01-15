@@ -1,0 +1,1 @@
+export { useRestriction } from './useRestriction';

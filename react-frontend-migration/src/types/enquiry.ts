@@ -19,17 +19,24 @@ export interface EnquiryReplyTo {
   enquiry_id: string;
 }
 
+export interface EnquiryReplyToFull {
+  enquiry_id: string;
+  title: string;
+  topic: string;
+}
+
 export interface Enquiry {
   enquiry_id: string;
   title: string;
   content: string;
+  email: string;
   topic: EnquiryTopic;
   users: {
     from: EnquiryUser;
     to: EnquiryUser;
   };
   property: EnquiryProperty;
-  replyTo?: EnquiryReplyTo;
+  replyTo?: EnquiryReplyToFull;
   read: boolean;
   createdAt?: string;
   updatedAt?: string;

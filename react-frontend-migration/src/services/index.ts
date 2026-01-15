@@ -9,3 +9,6 @@ export {
 } from './userService';
 
 export { useUserService } from './useUserService';
+
+export * from './storageService';
+export { default as storageService } from './storageService';

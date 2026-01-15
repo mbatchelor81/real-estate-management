@@ -13,6 +13,7 @@ const EnquiriesPage = lazy(() => import('@/pages/Enquiries/EnquiriesPage'));
 const UserSignInPage = lazy(() => import('@/pages/User/UserSignInPage'));
 const UserRegisterPage = lazy(() => import('@/pages/User/UserRegisterPage'));
 const UserProfilePage = lazy(() => import('@/pages/User/UserProfilePage'));
+const ChangePasswordPage = lazy(() => import('@/pages/User/ChangePassword/ChangePasswordPage'));
 const SettingsPage = lazy(() => import('@/pages/Settings/SettingsPage'));
 const AboutPage = lazy(() => import('@/pages/About/AboutPage'));
 
@@ -105,6 +106,16 @@ export const router = createBrowserRouter([
               <ProtectedRoute>
                 <SuspenseWrapper>
                   <UserProfilePage />
+                </SuspenseWrapper>
+              </ProtectedRoute>
+            ),
+          },
+          {
+            path: 'change-password',
+            element: (
+              <ProtectedRoute>
+                <SuspenseWrapper>
+                  <ChangePasswordPage />
                 </SuspenseWrapper>
               </ProtectedRoute>
             ),

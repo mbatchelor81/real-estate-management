@@ -11,6 +11,10 @@ export {
   register,
   googleAuth,
   changePassword,
+  selectAuthUser,
+  selectAuthIsAuthenticated,
+  selectAuthIsLoading,
+  selectAuthError,
 } from './authSlice';
 
 export {

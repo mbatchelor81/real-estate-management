@@ -24,6 +24,8 @@ interface MapLeafletProps {
   showPropertyMarkers?: boolean;
   visibleMarkerType?: PropertyType[];
   onClickedAt?: (coord: Coord) => void;
+  initialCenter?: Coord;
+  className?: string;
 }
 
 export interface MapLeafletRef {
@@ -276,6 +278,8 @@ export const MapLeaflet = forwardRef<MapLeafletRef, MapLeafletProps>(
       showPropertyMarkers = true,
       visibleMarkerType = [],
       onClickedAt,
+      initialCenter,
+      className,
     },
     ref
   ): React.ReactElement {
@@ -296,9 +300,13 @@ export const MapLeaflet = forwardRef<MapLeafletRef, MapLeafletProps>(
 
     useEffect(() => {
       const initializeMap = async (): Promise<void> => {
-        const storedCoord = await storageService.getCoord();
-        if (storedCoord) {
-          setCenter(storedCoord);
+        if (initialCenter) {
+          setCenter(initialCenter);
+        } else {
+          const storedCoord = await storageService.getCoord();
+          if (storedCoord) {
+            setCenter(storedCoord);
+          }
         }
 
         const darkTheme = await storageService.getDarkTheme();
@@ -308,7 +316,7 @@ export const MapLeaflet = forwardRef<MapLeafletRef, MapLeafletProps>(
       };
 
       void initializeMap();
-    }, []);
+    }, [initialCenter]);
 
     const handleMapReady = useCallback((map: Map): void => {
       mapRef.current = map;
@@ -360,7 +368,7 @@ export const MapLeaflet = forwardRef<MapLeafletRef, MapLeafletProps>(
         zoom={DEFAULT_ZOOM}
         minZoom={MIN_ZOOM}
         zoomControl={false}
-        className="h-full w-full"
+        className={className ?? "h-full w-full"}
         id="mapId"
       >
         <TileLayer

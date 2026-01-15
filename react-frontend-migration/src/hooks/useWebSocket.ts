@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Activity, Notification, Enquiry } from '@/types';
 import {
   SocketNotificationType,
@@ -73,6 +73,8 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     }
   }, []);
 
+  const connectRef = useRef<((token: string) => void) | null>(null);
+
   const attemptReconnect = useCallback((): void => {
     if (reconnectAttemptsRef.current >= reconnectAttempts) {
       return;
@@ -86,8 +88,8 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     const delay = reconnectInterval * Math.pow(2, reconnectAttemptsRef.current - 1);
 
     reconnectTimeoutRef.current = setTimeout(() => {
-      if (tokenRef.current) {
-        connect(tokenRef.current);
+      if (tokenRef.current && connectRef.current) {
+        connectRef.current(tokenRef.current);
       }
     }, delay);
   }, [reconnectAttempts, reconnectInterval]);
@@ -130,6 +132,11 @@ export function useWebSocket(options: UseWebSocketOptions = {}): UseWebSocketRet
     },
     [clearReconnectTimeout, handleNotification, attemptReconnect]
   );
+
+  // Keep connectRef in sync with connect
+  useEffect(() => {
+    connectRef.current = connect;
+  }, [connect]);
 
   const disconnect = useCallback((): void => {
     clearReconnectTimeout();

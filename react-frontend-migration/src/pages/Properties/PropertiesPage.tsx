@@ -66,7 +66,6 @@ const SORT_OPTIONS: SortOption[] = [
 export default function PropertiesPage(): React.ReactElement {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   const [presentToast] = useIonToast();
   const dispatch = useAppDispatch();
 
@@ -172,14 +171,13 @@ export default function PropertiesPage(): React.ReactElement {
     [searchParams, setSearchParams, propertiesService, loadProperties]
   );
 
-  const handleLoadMore = useCallback(async (): Promise<void> => {
-    await loadProperties();
+  const handleLoadMore = useCallback((): void => {
+    void loadProperties();
   }, [loadProperties]);
 
   const handleNewProperty = useCallback((): void => {
     if (!user) {
       void navigate('/user/signin');
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       void presentToast({
         message: 'Please sign in to continue',
         duration: 3000,
@@ -262,7 +260,7 @@ export default function PropertiesPage(): React.ReactElement {
 
       <IonFab slot="fixed" vertical="bottom" horizontal="end" className="ion-margin-end show-on-mobile">
         <IonFabButton onClick={handleNewProperty} color="success">
-          <IonIcon icon={addOutline as string} />
+          <IonIcon icon={addOutline} />
         </IonFabButton>
       </IonFab>
 
@@ -285,7 +283,7 @@ export default function PropertiesPage(): React.ReactElement {
                   disabled={displayOption === PropertiesDisplayOption.CardView}
                   size="small"
                 >
-                  <IonIcon icon={gridOutline as string} />
+                  <IonIcon icon={gridOutline} />
                 </IonButton>
 
                 <IonButton
@@ -294,7 +292,7 @@ export default function PropertiesPage(): React.ReactElement {
                   disabled={displayOption === PropertiesDisplayOption.ListView}
                   size="small"
                 >
-                  <IonIcon icon={reorderFourOutline as string} />
+                  <IonIcon icon={reorderFourOutline} />
                 </IonButton>
               </IonCol>
 
@@ -305,7 +303,7 @@ export default function PropertiesPage(): React.ReactElement {
                   onClick={handleNewProperty}
                 >
                   New Property
-                  <IonIcon icon={addCircleOutline as string} />
+                  <IonIcon icon={addCircleOutline} />
                 </IonButton>
               </IonCol>
             </IonRow>

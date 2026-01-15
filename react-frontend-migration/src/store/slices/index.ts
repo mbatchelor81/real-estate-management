@@ -7,6 +7,7 @@ export {
   signOut,
   clearError as clearAuthError,
   restoreSession,
+  initializeAuth,
   signIn,
   register,
   googleAuth,

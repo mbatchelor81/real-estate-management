@@ -13,6 +13,7 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   isAuthenticated: boolean;
+  isInitialized: boolean;
 }
 
 const initialState: AuthState = {
@@ -20,6 +21,7 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
   isAuthenticated: false,
+  isInitialized: false,
 };
 
 export const signIn = createAsyncThunk(
@@ -90,6 +92,10 @@ const authSlice = createSlice({
     restoreSession: (state, action: PayloadAction<UserSignedIn>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
+      state.isInitialized = true;
+    },
+    initializeAuth: (state) => {
+      state.isInitialized = true;
     },
   },
   extraReducers: (builder) => {
@@ -139,5 +145,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setUser, signOut, clearError, restoreSession } = authSlice.actions;
+export const { setUser, signOut, clearError, restoreSession, initializeAuth } = authSlice.actions;
 export default authSlice.reducer;

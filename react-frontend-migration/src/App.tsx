@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { useAppDispatch, useAppSelector, restoreSession, restoreTheme } from '@/store';
+import { useAppDispatch, useAppSelector, restoreSession, initializeAuth, restoreTheme } from '@/store';
 import type { UserSignedIn } from '@/types';
 
 export default function App(): React.ReactElement {
@@ -18,7 +18,10 @@ export default function App(): React.ReactElement {
         dispatch(restoreSession(parsedUser));
       } catch {
         localStorage.removeItem('user');
+        dispatch(initializeAuth());
       }
+    } else {
+      dispatch(initializeAuth());
     }
     dispatch(restoreTheme());
   }, [dispatch]);
